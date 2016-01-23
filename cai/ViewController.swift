@@ -8,10 +8,12 @@
 
 import AVFoundation
 import UIKit
+import Alamofire
+import SnapKit
 
 class ViewController: UIViewController {
-    var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
+    var filePath: NSURL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +24,12 @@ class ViewController: UIViewController {
         recordButton.addTarget(self, action: Selector("startRecording:"), forControlEvents: UIControlEvents.TouchDown)
         recordButton.addTarget(self, action: Selector("endRecording:"), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(recordButton)
+        recordButton.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(self.view).offset(20)
+            make.left.equalTo(self.view).offset(20)
+            make.bottom.equalTo(self.view).offset(-20)
+            make.right.equalTo(self.view).offset(-20)
+        }
     }
 
     func startRecording(sender: UIButton!) {
@@ -29,8 +37,7 @@ class ViewController: UIViewController {
         
         let recordingName = "sound.wav"
         let pathArray = [dirPath, recordingName]
-        let filePath = NSURL.fileURLWithPathComponents(pathArray)
-        print(filePath)
+        filePath = NSURL.fileURLWithPathComponents(pathArray)
         
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSessionCategoryPlayAndRecord)
@@ -39,14 +46,18 @@ class ViewController: UIViewController {
         audioRecorder.meteringEnabled = true
         audioRecorder.prepareToRecord()
         audioRecorder.record()
-        print("start")
     }
     
     func endRecording(sender: UIButton!) {
         audioRecorder.stop()
-        print("end")
+        showGraph()
     }
     
-    func sendSound(String
-
+    func showGraph() {
+        if let data = NSData(contentsOfURL: filePath!) {
+            Alamofire.upload(.POST, "meow.com/", data: data)
+            .responseJSON { _ in }
+        }
+    }
+    
 }
