@@ -21,20 +21,20 @@ class ViewController: UIViewController {
 
         let english = UILabel()
         english.text = "wǒ"
-        english.font = UIFont(name: english.font.fontName, size: 40)
+        english.font = UIFont(name: english.font.fontName, size: 20)
+        self.view.addSubview(english)
+        english.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(self.view)
+            make.top.equalTo(self.view).offset(80)
+        }
+        
         let chinese = UILabel()
         chinese.text = "我"
-        chinese.font = UIFont(name: chinese.font.fontName, size: 40)
-
-        self.view.addSubview(english)
+        chinese.font = UIFont(name: chinese.font.fontName, size: 100)
         self.view.addSubview(chinese)
-        english.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(self.view).offset(100)
-            make.top.equalTo(self.view).offset(130)
-        }
         chinese.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(self.view).offset(-100)
-            make.top.equalTo(self.view).offset(130)
+            make.centerX.equalTo(self.view)
+            make.top.equalTo(self.view).offset(180)
         }
 
         
@@ -46,7 +46,7 @@ class ViewController: UIViewController {
         self.view.addSubview(recordButton)
         recordButton.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(self.view).offset(80)
-            make.bottom.equalTo(self.view).offset(-30)
+            make.bottom.equalTo(self.view).offset(-50)
             make.right.equalTo(self.view).offset(-80)
         }
     }
