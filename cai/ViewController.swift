@@ -9,17 +9,23 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var recordButton: UIButton!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        recordButton = UIButton()
+        
+        let recordButton = UIButton(type: UIButtonType.System) as UIButton
+        recordButton.frame = CGRectMake(100, 100, 100, 50)
+        recordButton.setTitle("we out here", forState: UIControlState.Normal)
+        recordButton.addTarget(self, action: Selector("startRecording:"), forControlEvents: UIControlEvents.TouchDown)
+        recordButton.addTarget(self, action: Selector("endRecording:"), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(recordButton)
-        recordButton.addTarget(self, action: Selector("startRecording:"), forControlEvents: UIControlEvents.TouchUpInside)
     }
 
     func startRecording(sender: UIButton!) {
-        print("meow")
+        print("start")
+    }
+    
+    func endRecording(sender: UIButton!) {
+        print("end")
     }
 
 }
