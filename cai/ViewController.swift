@@ -11,6 +11,7 @@ import UIKit
 import Alamofire
 import SnapKit
 import Charts
+import SwiftyJSON
 
 class ViewController: UIViewController {
     var audioRecorder: AVAudioRecorder!
@@ -75,9 +76,18 @@ class ViewController: UIViewController {
     func showGraph() {
         if let data = NSData(contentsOfURL: filePath!) {
             Alamofire
-                .upload(.POST, "meow.com/", data: data)
-                .responseJSON { _ in }
-
+                .upload(.POST, "cai-tones.herokuapp.com", data: data)
+                .responseJSON { response in
+                    switch response.result {
+                    case .Success:
+                        if let value = response.result.value {
+                            let json = JSON(value)
+                            print("JSON: \(json)")
+                        }
+                    case .Failure(let error):
+                        print(error)
+                    }
+            }
         }
     }
 
