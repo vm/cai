@@ -21,30 +21,35 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         let english = UILabel()
-        english.text = "wǒ"
-        english.font = UIFont(name: english.font.fontName, size: 20)
-        self.view.addSubview(english)
-        english.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(self.view)
-            make.top.equalTo(self.view).offset(80)
-        }
-        
-        let chinese = UILabel()
-        chinese.text = "我"
-        chinese.font = UIFont(name: chinese.font.fontName, size: 100)
-        self.view.addSubview(chinese)
-        chinese.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(self.view)
-            make.top.equalTo(self.view).offset(180)
-        }
+        self.addCharacter(english, char: "wǒ", size: 20, alignView: self.view)
 
-        
-        let recordButton = UIButton(type: UIButtonType.System) as UIButton
+        let chinese = UILabel()
+        self.addCharacter(chinese, char: "我", size: 100, alignView: english)
+
+        self.addButton(UIButton(type: UIButtonType.System))
+    }
+
+    func addCharacter(label: UILabel, char: String, size: CGFloat, alignView: UIView) {
+      label.text = char
+      label.font = UIFont(name: label.font.fontName, size: size)
+
+      self.view.addSubview(label)
+
+      label.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(alignView)
+            make.top.equalTo(alignView).offset(80)
+        }
+    }
+
+    func addButton(recordButton: UIButton) {
         recordButton.titleLabel!.font = UIFont(name: "HelveticaNeue-Thin", size: 25)
         recordButton.setTitle("record", forState: UIControlState.Normal)
+
         recordButton.addTarget(self, action: Selector("startRecording:"), forControlEvents: UIControlEvents.TouchDown)
         recordButton.addTarget(self, action: Selector("endRecording:"), forControlEvents: UIControlEvents.TouchUpInside)
+
         self.view.addSubview(recordButton)
+
         recordButton.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(self.view).offset(80)
             make.bottom.equalTo(self.view).offset(-50)
@@ -70,10 +75,6 @@ class ViewController: UIViewController {
 
     func endRecording(sender: UIButton!) {
         audioRecorder.stop()
-        showGraph()
-    }
-
-    func showGraph() {
         if let data = NSData(contentsOfURL: filePath!) {
             Alamofire
                 .upload(.POST, "cai-tones.herokuapp.com", data: data)
